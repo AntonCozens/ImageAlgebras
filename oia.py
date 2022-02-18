@@ -14,7 +14,7 @@
 #          St. Augustine.
 #
 #
-# Version 4. 2022-02-18
+# Experiment IV. 2022-02-18
 # 
 # Implementation of H
 # 
@@ -129,8 +129,8 @@ def FV(i):
 
 # Substitution.
 # i - Image
-# b - binding variable
-# s - substitution
+# s - Substitution Image
+# v - Variable Image
 def Sub(i: Image, s: Image, v: Image) -> Image:
     if i == I:
         return I
@@ -158,6 +158,21 @@ def Sub(i: Image, s: Image, v: Image) -> Image:
     else:
         newR = Image(Sub(i.R, b, s))
     return Image(newL, i.Op, newR)
+
+print('\\' * 60)
+print('Substitution')
+print('/' * 60) 
+
+def RunSub(old: Image, sub: Image, var: Image) -> None:
+    print("old: " + str(old))
+    print("sub: " + str(old) + '[' + str(sub) + '/' + str(var) + ']')
+    print("new: " + str(Sub(old, sub, var)))
+    print("-" * 60)
+
+old = I
+sub = I
+var = I
+RunSub(old, sub, var)
 
 print("TS1: " + str( str(Sub(I, I, I)) == str(I) ))
 print("TS2: " + str( str(Sub(I, ICI, I)) == str(I) ))
