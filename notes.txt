@@ -1,0 +1,34 @@
+In p?q the variables in q are not free.
+
+Do we need channels to change initially? 
+
+FV (p?q) = []
+
+At the top level then:
+
+FV (p!q) = [q]  # don't let q be ree at the momemt.
+
+FV (p+q) = [p,q]
+
+FV (p.q)                                # SEQ Binds.
+                                        # Need to get binding variables.
+Binding variables
+
+What happens if you combine two squences?
+## Possible take I as glue?
+## I is never used alone.
+
+p.I.q.I - p.q.I
+
+Then:
+
+p1.I.p2.I.q.I binding variables in p1 and p2 bind q, reduces to:
+
+p1.p2.q.I
+
+BV (I) = []
+BV (p.q) = 
+BV (p+q) = BV(p) + BV(q)
+BV (p?q.I) = [q]
+BV (p?q1.p?q2.I) = [q1,q2]
+BV (p!q) = []
