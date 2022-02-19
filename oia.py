@@ -61,7 +61,10 @@ class Image:
         return "(" + str(self.L) + self.Op + str(self.R) + ")"
 
 def CSplit(i: Image) -> list[Image]:
+    if i.Op == Op.C:
+        return CSplit(i.L) + CSplit(i.R)
     return [i]
+
 
 def SSplit(i: Image) -> list[Image]:
     return i
@@ -110,9 +113,9 @@ ICI = Image(I, Op.C, I)
 H = Image(Image(I ,Op.Q , ICI), Op.S, Image(Image(I, Op.E, ICI), Op.S, ICI))
 YL = Image(Image(Image(I, Op.E, H), Op.S, H), Op.C, H)
 YR = Image(H, Op.C, Image(Image(I, Op.E, H), Op.S, H))
+print(str(YL))
 
 print("YL -----:")
-print(str(YL))
 print("YR -----:")
 print(str(YR))
 
@@ -154,3 +157,38 @@ RunSubTest(I, I, I, I)
 RunSubTest(I, ICI, I, ICI)
 
 RunSubTest(YL, ISI, ICI, EXP)
+
+for i in CSplit(I):
+    print(str(i))
+    print('#' * 60)
+
+for i in CSplit(ICI):
+    print(str(i))
+print('#' * 60)
+
+for i in CSplit(ISI):
+    print(str(i))
+print('#' * 60)
+
+for i in CSplit(IEI):
+    print(str(i))
+print('#' * 60)
+
+for i in CSplit(IQI):
+    print(str(i))
+print('#' * 60)
+
+image = Image(I, Op.C, ICI)
+for i in CSplit(image):
+    print(str(i))
+print('#' * 60)
+
+image = Image(ICI, Op.C, I)
+for i in CSplit(image):
+    print(str(i))
+print('#' * 60)
+
+image = Image(ICI, Op.C, ICI)
+for i in CSplit(image):
+    print(str(i))
+print('#' * 60)
