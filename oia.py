@@ -86,6 +86,13 @@ def ActOut(images : list[Image]) -> list[Image]:
             sending = sending + [i.L]
     return sending
 
+def ActIn(images : list[Image]) -> list[Image]:
+    receiving = []
+    for i in images:
+        if i.Op == Op.Q:
+            receiving = receiving + [i.L]
+    return receiving
+
 def Quieten(ill: list[list[Image]], s: Image, v: Image) -> Image:
     return I
 
@@ -284,3 +291,25 @@ imageR = Image(IEI, Op.E, Image(ICI, Op.S, I))
 image = Image(imageL, Op.E, imageR)
 images = [imageL, imageR, image]
 ActOutTest(images)
+
+def ActInTest(images: list[Image]) -> None:
+    for i in images:
+        print(str(i))
+    actin = ActIn(images)
+    x = 1
+    for act in actin:
+        print('In ' + str(x) + ' -> ' + str(act))
+        x = x + 1
+    print('-' * 60)
+
+imageL = Image(IQI, Op.S, I)
+imageR = Image(IEI, Op.S, Image(ICI, Op.S, I))
+image = Image(imageL, Op.C, imageR)
+images = [imageL, imageR, image]
+ActInTest(images)
+
+imageL = Image(IQI, Op.Q, I)
+imageR = Image(IEI, Op.Q, Image(ICI, Op.S, I))
+image = Image(imageL, Op.Q, imageR)
+images = [imageL, imageR, image]
+ActInTest(images)
