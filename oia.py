@@ -92,8 +92,8 @@ IQI_Q_ICI__S_IQI = Image(IQI_ICI, Op.Q, IQI)
 # IQI_Q_ICI__S_IQI = Image(I_Q_ICI, Op.S, IQI)
 
 H = Image(Image(I ,Op.Q , ICI), Op.S, Image(Image(I, Op.E, ICI), Op.S, ICI))
-Y = Image(Image(Image(I, Op.E, H), Op.S, H), Op.S, H)
-
+YL = Image(Image(Image(I, Op.E, H), Op.S, H), Op.C, H)
+YR = Image(H, Op.C, Image(Image(I, Op.E, H), Op.S, H))
 
 print("T1: " + str(str(I) == "I"))
 print("T2: " + str(BV(I) == []))
