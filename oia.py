@@ -72,21 +72,23 @@ def Sub(i: Image, s: Image, v: Image) -> Image:
     if i.Op == Op.Q:
         if str(i.R) == str(v):
             return i
-        return Image(i.L, i.Op, I)
-    return i 
+        return Image(i.L, i.Op, Image(I, Op.E, I))
+    return Image(Sub(i.L, s, v), i.Op, Sub(i.L, s, v))
 
 def RunSub(old: Image, sub: Image, var: Image):
     new = Sub(old, sub, var)
     print("old: " + str(old))
-    print("sub: " + str(old) + '[' + str(sub) + '/' + str(var) + ']')
+    print("sub: " +'[' + str(sub) + '/' + str(var) + ']')
     print("new: " + str(new))
     print("-" * 60)
     return new
 
 def RunSubTest(old: Image, sub: Image, var: Image, exp: Image):
+    print("exp: " + str(exp))
     new = RunSub(old, sub, var)
     print(str(str(new) == str(exp)))
     print("=" * 60)
+
 OI = Op.I
 I = Image(Image("", OI, ""), OI, Image("", OI, ""))
 ICI = Image(I, Op.C, I)
@@ -132,3 +134,10 @@ IQI_Q_ICI__S_IQI = Image(IQI_ICI, Op.Q, IQI)
 
 RunSubTest(YL, I, I, YL)
 RunSubTest(YL, ICI, I, YL)
+RunSubTest(YL, ISI, ICI, YL)
+
+# Redefine.
+H = Image(Image(I ,Op.Q , ISI), Op.S, Image(Image(I, Op.E, ICI), Op.S, ICI))
+EXP = Image(Image(Image(I, Op.E, H), Op.S, H), Op.C, H)
+
+RunSubTest(YL, ISI, ICI, EXP)
