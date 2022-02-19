@@ -75,12 +75,18 @@ def Sub(i: Image, s: Image, v: Image) -> Image:
         return Image(i.L, i.Op, I)
     return i 
 
-def RunSub(old: Image, sub: Image, var: Image) -> None:
+def RunSub(old: Image, sub: Image, var: Image):
+    new = Sub(old, sub, var)
     print("old: " + str(old))
     print("sub: " + str(old) + '[' + str(sub) + '/' + str(var) + ']')
-    print("new: " + str(Sub(old, sub, var)))
+    print("new: " + str(new))
     print("-" * 60)
+    return new
 
+def RunSubTest(old: Image, sub: Image, var: Image, exp: Image):
+    new = RunSub(old, sub, var)
+    print(str(str(new) == str(exp)))
+    print("=" * 60)
 OI = Op.I
 I = Image(Image("", OI, ""), OI, Image("", OI, ""))
 ICI = Image(I, Op.C, I)
@@ -100,7 +106,10 @@ print('/' * 60)
 old = I
 sub = I
 var = I
-RunSub(old, sub, var)
+RunSubTest(old, sub, var, I)
+
+RunSubTest(YL, H, ICI, YR)
+RunSubTest(YR, H, ICI, YL)
 
 ISI = Image(I, Op.S, I)
 IEI = Image(I, Op.E, I)
