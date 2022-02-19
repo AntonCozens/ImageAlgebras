@@ -60,6 +60,18 @@ class Image:
             return "I"
         return "(" + str(self.L) + self.Op + str(self.R) + ")"
 
+OI = Op.I
+I = Image(Image("", OI, ""), OI, Image("", OI, ""))
+ICI = Image(I, Op.C, I)
+H = Image(Image(I ,Op.Q , ICI), Op.S, Image(Image(I, Op.E, ICI), Op.S, ICI))
+YL = Image(Image(Image(I, Op.E, H), Op.S, H), Op.C, H)
+YR = Image(H, Op.C, Image(Image(I, Op.E, H), Op.S, H))
+
+print("YL -----:")
+print(str(YL))
+print("YR -----:")
+print(str(YR))
+
 # Binding Variables
 def BV(i):
     if i.Op == Op.I:
@@ -69,9 +81,6 @@ def BV(i):
     return BV(i.L) + BV(i.R)
 
 # Binding Variables Tests
-OI = Op.I
-I = Image(Image("", OI, ""), OI, Image("", OI, ""))
-ICI = Image(I, Op.C, I)
 ISI = Image(I, Op.S, I)
 IEI = Image(I, Op.E, I)
 IQI = Image(I, Op.Q, I)
@@ -90,10 +99,6 @@ IQI_Q_ICI__S_IQI = Image(IQI_ICI, Op.Q, IQI)
 
 IQI_Q_ICI__S_IQI = Image(IQI_ICI, Op.Q, IQI)
 # IQI_Q_ICI__S_IQI = Image(I_Q_ICI, Op.S, IQI)
-
-H = Image(Image(I ,Op.Q , ICI), Op.S, Image(Image(I, Op.E, ICI), Op.S, ICI))
-YL = Image(Image(Image(I, Op.E, H), Op.S, H), Op.C, H)
-YR = Image(H, Op.C, Image(Image(I, Op.E, H), Op.S, H))
 
 print("T1: " + str(str(I) == "I"))
 print("T2: " + str(BV(I) == []))
