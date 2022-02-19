@@ -32,6 +32,7 @@
 #           / \
 #          I  I+I
 #
+from urllib.parse import non_hierarchical
 from list_and_set import *  
 
 class Op:
@@ -158,37 +159,37 @@ RunSubTest(I, ICI, I, ICI)
 
 RunSubTest(YL, ISI, ICI, EXP)
 
-for i in CSplit(I):
-    print(str(i))
-    print('#' * 60)
+def CSplitTest(image: Image) -> None:
+    print(str(image) + ' ->')
+    for i in CSplit(image):
+        print(str(i))
+    print('-' * 60)
 
-for i in CSplit(ICI):
-    print(str(i))
-print('#' * 60)
-
-for i in CSplit(ISI):
-    print(str(i))
-print('#' * 60)
-
-for i in CSplit(IEI):
-    print(str(i))
-print('#' * 60)
-
-for i in CSplit(IQI):
-    print(str(i))
-print('#' * 60)
-
+CSplitTest(I)
+CSplitTest(ICI)
+CSplitTest(ISI)
+CSplitTest(IEI)
+CSplitTest(IQI)
 image = Image(I, Op.C, ICI)
-for i in CSplit(image):
-    print(str(i))
-print('#' * 60)
-
+CSplitTest(image)
 image = Image(ICI, Op.C, I)
-for i in CSplit(image):
-    print(str(i))
-print('#' * 60)
-
+CSplitTest(image)
 image = Image(ICI, Op.C, ICI)
-for i in CSplit(image):
-    print(str(i))
-print('#' * 60)
+CSplitTest(image)
+image = Image(ISI, Op.C, ICI)
+CSplitTest(image)
+image = Image(ICI, Op.C, ISI)
+CSplitTest(image)
+image = Image(ISI, Op.C, ISI)
+CSplitTest(image)
+image = Image(IEI, Op.C, IQI)
+CSplitTest(image)
+image = Image(IQI, Op.C, IEI)
+CSplitTest(image)
+image = Image(IQI, Op.S, IEI)
+CSplitTest(image)
+image = Image(IQI, Op.E, IEI)
+CSplitTest(image)
+image = Image(IQI, Op.Q, IEI)
+CSplitTest(image)
+
