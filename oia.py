@@ -32,6 +32,10 @@
 #           / \
 #          I  I+I
 #
+# Whwn talking about images rge terms li and ri will be used as follows:
+#
+# li o ri
+#
 from urllib.parse import non_hierarchical
 from list_and_set import *  
 
@@ -66,19 +70,21 @@ def CSplit(i: Image) -> list[Image]:
         return CSplit(i.L) + CSplit(i.R)
     return [i]
 
-
 def SSplit(i: Image) -> list[Image]:
-
     if i.Op == Op.S:
         return SSplit(i.L) + SSplit(i.R)
     return [i]
 
 def Excite(image: Image) -> list[list[Image]]:
     images = []
-    for i in CSplit(image):
-        for j in SSplit(i):
-            images = images + [j]
-    return images
+    return CSplit(image)
+
+def ActOut(images : list[Image]) -> list[Image]:
+    sending = []
+    for i in images:
+        if i.Op == Op.E:
+            sending = sending + [i.L]
+    return sending
 
 def Quieten(ill: list[list[Image]], s: Image, v: Image) -> Image:
     return I
@@ -252,3 +258,29 @@ image = Image(I, Op.C, Image( I, Op.C, Image(I, Op.C, ICI)))
 ExciteTest(image)
 image = Image(IQI, Op.C, Image( I, Op.C, Image(I, Op.S, ICI)))
 ExciteTest(image)
+imageL = Image(IQI, Op.S, I)
+imageR = Image(IEI, Op.S, Image(ICI, Op.S, I))
+image = Image(imageL, Op.C, imageR)
+ExciteTest(image)
+
+def ActOutTest(images: list[Image]) -> None:
+    for i in images:
+        print(str(i))
+    actout = ActOut(images)
+    x = 1
+    for act in actout:
+        print('Out ' + str(x) + ' -> ' + str(act))
+        x = x + 1
+    print('-' * 60)
+
+imageL = Image(IQI, Op.S, I)
+imageR = Image(IEI, Op.S, Image(ICI, Op.S, I))
+image = Image(imageL, Op.C, imageR)
+images = [imageL, imageR, image]
+ActOutTest(images)
+
+imageL = Image(IQI, Op.E, I)
+imageR = Image(IEI, Op.E, Image(ICI, Op.S, I))
+image = Image(imageL, Op.E, imageR)
+images = [imageL, imageR, image]
+ActOutTest(images)
