@@ -60,13 +60,25 @@ class Image:
             return "I"
         return "(" + str(self.L) + self.Op + str(self.R) + ")"
 
+def CSplit(i: Image) -> list[Image]:
+    return [i]
+
+def SSplit(i: Image) -> list[Image]:
+    return i
+
+def Excite(il: list[Image]) -> Image:
+    return I
+
+def Quieten(ill: list[list[Image]], s: Image, v: Image) -> Image:
+    return I
+
 # Substitution.
 # i - Image
 # s - Substitution Image
 # v - Variable Image
 def Sub(i: Image, s: Image, v: Image) -> Image:
-    if i == I:
-        return I
+    if i != v:
+        return i
     if str(v) == str(i):
         return s
     if i.Op == Op.Q:
@@ -85,7 +97,10 @@ def RunSub(old: Image, sub: Image, var: Image):
 
 def RunSubTest(old: Image, sub: Image, var: Image, exp: Image):
     print("exp: " + str(exp))
+    # try:
     new = RunSub(old, sub, var)
+    # except:
+    #     print('Oops!')
     print(str(str(new) == str(exp)))
     print("=" * 60)
 
@@ -104,11 +119,6 @@ print(str(YR))
 print('\\' * 60)
 print('Substitution')
 print('/' * 60)
-
-old = I
-sub = I
-var = I
-RunSubTest(old, sub, var, I)
 
 RunSubTest(YL, H, ICI, YR)
 RunSubTest(YR, H, ICI, YL)
@@ -139,5 +149,8 @@ RunSubTest(YL, ISI, ICI, YL)
 # Redefine.
 H = Image(Image(I ,Op.Q , ISI), Op.S, Image(Image(I, Op.E, ICI), Op.S, ICI))
 EXP = Image(Image(Image(I, Op.E, H), Op.S, H), Op.C, H)
+
+RunSubTest(I, I, I, I)
+RunSubTest(I, ICI, I, ICI)
 
 RunSubTest(YL, ISI, ICI, EXP)
