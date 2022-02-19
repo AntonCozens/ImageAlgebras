@@ -32,3 +32,9 @@ BV (p+q) = BV(p) + BV(q)
 BV (p?q.I) = [q]
 BV (p?q1.p?q2.I) = [q1,q2]
 BV (p!q) = []
+
+git config --global core.compression 0
+git clone --depth 1 https://github.com/AntonCozens/ImageAlgebras
+# cd to your newly created directory
+git fetch --unshallow 
+git pull --all

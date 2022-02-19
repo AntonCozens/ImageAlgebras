@@ -68,12 +68,17 @@ def CSplit(i: Image) -> list[Image]:
 
 
 def SSplit(i: Image) -> list[Image]:
+
     if i.Op == Op.S:
         return SSplit(i.L) + SSplit(i.R)
     return [i]
 
-def Excite(il: list[Image]) -> Image:
-    return I
+def Excite(image: Image) -> list[list[Image]]:
+    images = []
+    for i in CSplit(image):
+        for j in SSplit(i):
+            images = images + [j]
+    return images
 
 def Quieten(ill: list[list[Image]], s: Image, v: Image) -> Image:
     return I
@@ -229,3 +234,21 @@ SSplitTest(image)
 image = Image(IQI, Op.Q, IEI)
 SSplitTest(image)
 
+def ExciteTest(image: Image) -> None:
+    print(str(image) + ' ->')
+    excited = Excite(image)
+    print(excited)
+    x = 1
+    for option in excited:
+        print('Option ' + str(x) + ' ->')
+        print(str(option))
+        x = x + 1
+    print('-' * 60)
+
+
+ExciteTest(I)
+ExciteTest(ICI)
+image = Image(I, Op.C, Image( I, Op.C, Image(I, Op.C, ICI)))
+ExciteTest(image)
+image = Image(IQI, Op.C, Image( I, Op.C, Image(I, Op.S, ICI)))
+ExciteTest(image)
