@@ -68,7 +68,9 @@ def CSplit(i: Image) -> list[Image]:
 
 
 def SSplit(i: Image) -> list[Image]:
-    return i
+    if i.Op == Op.S:
+        return SSplit(i.L) + SSplit(i.R)
+    return [i]
 
 def Excite(il: list[Image]) -> Image:
     return I
@@ -192,4 +194,38 @@ image = Image(IQI, Op.E, IEI)
 CSplitTest(image)
 image = Image(IQI, Op.Q, IEI)
 CSplitTest(image)
+
+def SSplitTest(image: Image) -> None:
+    print(str(image) + ' ->')
+    for i in SSplit(image):
+        print(str(i))
+    print('-' * 60)
+
+SSplitTest(I)
+SSplitTest(ICI)
+SSplitTest(ISI)
+SSplitTest(IEI)
+SSplitTest(IQI)
+image = Image(I, Op.C, ICI)
+SSplitTest(image)
+image = Image(ICI, Op.S, I)
+SSplitTest(image)
+image = Image(ICI, Op.S, ICI)
+SSplitTest(image)
+image = Image(ISI, Op.S, ICI)
+SSplitTest(image)
+image = Image(ICI, Op.S, ISI)
+SSplitTest(image)
+image = Image(ISI, Op.S, ISI)
+SSplitTest(image)
+image = Image(IEI, Op.S, IQI)
+SSplitTest(image)
+image = Image(IQI, Op.S, IEI)
+SSplitTest(image)
+image = Image(IQI, Op.S, IEI)
+SSplitTest(image)
+image = Image(IQI, Op.E, IEI)
+SSplitTest(image)
+image = Image(IQI, Op.Q, IEI)
+SSplitTest(image)
 
