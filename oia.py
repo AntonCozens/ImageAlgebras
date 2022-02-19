@@ -111,6 +111,7 @@ RunSubTest(old, sub, var, I)
 RunSubTest(YL, H, ICI, YR)
 RunSubTest(YR, H, ICI, YL)
 
+# Scaffolding.
 ISI = Image(I, Op.S, I)
 IEI = Image(I, Op.E, I)
 IQI = Image(I, Op.Q, I)
@@ -128,3 +129,6 @@ IQI_Q_ICI__S_ISI = Image(IQI_ICI, Op.Q, ISI)
 IQI_Q_ICI__S_IQI = Image(IQI_ICI, Op.Q, IQI)
 
 IQI_Q_ICI__S_IQI = Image(IQI_ICI, Op.Q, IQI)
+
+RunSubTest(YL, I, I, YL)
+RunSubTest(YL, ICI, I, YL)
