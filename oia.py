@@ -134,16 +134,11 @@ def Reduce(image: Image) -> Image:
             print(str(seq))
         print('----')
     triggers = []
-    acceptors = []
     for opt in excited:
         triggers = triggers + Outputs(opt)
-        acceptors = acceptors + Inputs(opt)
     print("Triggers")
     for t in triggers:
         print(str(t))
-    print("Acceptors")
-    for a in acceptors:
-        print(str(a))
     if triggers == []:
         return image
     trigger = triggers[0]
