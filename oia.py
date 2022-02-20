@@ -117,8 +117,9 @@ def Quieten(o: Image, li: Image, ri: list[Image]) -> Image:
     if o.Op == Op.E and li.Op == Op.Q:
         # match channels.
         if o.L == li.L:
-            for i in ri:
-                result = Image(Sub(i, o.R, I), Op.S, result)
+            for p in ri:
+                result = Image(Sub(ri, o.R, li.R), Op.S, result)
+            return result
     for i in ri:
         result = Image(o.R, Op.S, result)
     return result
@@ -186,8 +187,12 @@ EXP = Image(Image(Image(I, Op.E, H), Op.S, H), Op.C, H)
 
 RunSubTest(I, I, I, I)
 RunSubTest(I, ICI, I, ICI)
+RunSubTest(I, I, ICI, I)
 
-RunSubTest(YL, ISI, ICI, EXP)
+image = Image(IQI, Op.S, Image(IQI, Op.S, IQI))
+exp = Image(ICI, Op.S, Image(ICI, Op.S, ICI))
+RunSubTest(image, I, ICI, exp)
+# quit()
 
 def CSplitTest(image: Image) -> None:
     print(str(image) + ' ->')
@@ -334,6 +339,8 @@ def QuietenTest(o: Image, li: Image, ri: list[Image]):
     quiet = Quieten(o, li, ri)
     print('-> ' + str(quiet))
     print('*' * 60)
+
+print('Start: QuietenTests')
 
 o = Image(ICI, Op.E, ICI)
 li = Image(ICI, Op.Q, IQI)
