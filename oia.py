@@ -114,11 +114,13 @@ def Sub(i: Image, s: Image, v: Image) -> Image:
 
 def Quieten(o: Image, li: Image, ri: list[Image]) -> Image:
     result = I
-    if o.Op == Op.E:
+    if o.Op == Op.E and li.Op == Op.Q:
         # match channels.
         if o.L == li.L:
             for i in ri:
                 result = Image(Sub(i, o.R, I), Op.S, result)
+    for i in ri:
+        result = Image(o.R, Op.S, result)
     return result
 
 def RunSub(old: Image, sub: Image, var: Image):
@@ -352,5 +354,10 @@ QuietenTest(o, li, [ri])
 
 o = Image(ICI, Op.E, ICI)
 li = Image(ICI, Op.Q, ISI)
+ri = Image(IQI, Op.S, Image(IQI, Op.S, IQI))
+QuietenTest(o, li, [ri])
+
+o = Image(ICI, Op.E, ICI)
+li = Image(ICI, Op.C, ISI)
 ri = Image(IQI, Op.S, Image(IQI, Op.S, IQI))
 QuietenTest(o, li, [ri])
