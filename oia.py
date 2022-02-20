@@ -85,7 +85,7 @@ def Outputs(images : list[Image]) -> list[Image]:
             sending = sending + [i.L]
     return sending
 
-def ActIn(images : list[Image]) -> list[Image]:
+def Inputs(images : list[Image]) -> list[Image]:
     receiving = []
     for i in images:
         if i.Op == Op.Q:
@@ -303,12 +303,12 @@ image = Image(imageL, Op.E, imageR)
 images = [imageL, imageR, image]
 OutputsTest(images)
 
-def ActInTest(images: list[Image]) -> None:
+def InputsTest(images: list[Image]) -> None:
     for i in images:
         print(str(i))
-    actin = ActIn(images)
+    inputs = Inputs(images)
     x = 1
-    for act in actin:
+    for act in inputs:
         print('In ' + str(x) + ' -> ' + str(act))
         x = x + 1
     print('-' * 60)
@@ -317,13 +317,13 @@ imageL = Image(IQI, Op.S, I)
 imageR = Image(IEI, Op.S, Image(ICI, Op.S, I))
 image = Image(imageL, Op.C, imageR)
 images = [imageL, imageR, image]
-ActInTest(images)
+InputsTest(images)
 
 imageL = Image(IQI, Op.Q, I)
 imageR = Image(IEI, Op.Q, Image(ICI, Op.S, I))
 image = Image(imageL, Op.Q, imageR)
 images = [imageL, imageR, image]
-ActInTest(images)
+InputsTest(images)
 
 def QuietenTest(o: Image, li: Image, ri: list[Image]):
     print(str(o))
