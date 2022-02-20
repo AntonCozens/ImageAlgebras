@@ -68,19 +68,15 @@ class Image:
 OI = Op.I
 I = Image(Image("", OI, ""), OI, Image("", OI, ""))
 
-def CSplit(i: Image) -> list[Image]:
+def Excite(i: Image) -> list[Image]:
     if i.Op == Op.C:
-        return CSplit(i.L) + CSplit(i.R)
+        return Excite(i.L) + Excite(i.R)
     return [i]
 
 def SSplit(i: Image) -> list[Image]:
     if i.Op == Op.S:
         return SSplit(i.L) + SSplit(i.R)
     return [i]
-
-def Excite(image: Image) -> list[list[Image]]:
-    images = []
-    return CSplit(image)
 
 def ActOut(images : list[Image]) -> list[Image]:
     sending = []
@@ -194,39 +190,39 @@ exp = Image(ICI, Op.S, Image(ICI, Op.S, ICI))
 RunSubTest(image, I, ICI, exp)
 # quit()
 
-def CSplitTest(image: Image) -> None:
+def ExciteTest(image: Image) -> None:
     print(str(image) + ' ->')
-    for i in CSplit(image):
+    for i in Excite(image):
         print(str(i))
     print('-' * 60)
 
-CSplitTest(I)
-CSplitTest(ICI)
-CSplitTest(ISI)
-CSplitTest(IEI)
-CSplitTest(IQI)
+ExciteTest(I)
+ExciteTest(ICI)
+ExciteTest(ISI)
+ExciteTest(IEI)
+ExciteTest(IQI)
 image = Image(I, Op.C, ICI)
-CSplitTest(image)
+ExciteTest(image)
 image = Image(ICI, Op.C, I)
-CSplitTest(image)
+ExciteTest(image)
 image = Image(ICI, Op.C, ICI)
-CSplitTest(image)
+ExciteTest(image)
 image = Image(ISI, Op.C, ICI)
-CSplitTest(image)
+ExciteTest(image)
 image = Image(ICI, Op.C, ISI)
-CSplitTest(image)
+ExciteTest(image)
 image = Image(ISI, Op.C, ISI)
-CSplitTest(image)
+ExciteTest(image)
 image = Image(IEI, Op.C, IQI)
-CSplitTest(image)
+ExciteTest(image)
 image = Image(IQI, Op.C, IEI)
-CSplitTest(image)
+ExciteTest(image)
 image = Image(IQI, Op.S, IEI)
-CSplitTest(image)
+ExciteTest(image)
 image = Image(IQI, Op.E, IEI)
-CSplitTest(image)
+ExciteTest(image)
 image = Image(IQI, Op.Q, IEI)
-CSplitTest(image)
+ExciteTest(image)
 
 def SSplitTest(image: Image) -> None:
     print(str(image) + ' ->')
