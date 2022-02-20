@@ -78,7 +78,7 @@ def ExciteSeq(i: Image) -> list[Image]:
         return ExciteSeq(i.L) + ExciteSeq(i.R)
     return [i]
 
-def ActOut(images : list[Image]) -> list[Image]:
+def Outputs(images : list[Image]) -> list[Image]:
     sending = []
     for i in images:
         if i.Op == Op.E:
@@ -281,12 +281,12 @@ imageR = Image(IEI, Op.S, Image(ICI, Op.S, I))
 image = Image(imageL, Op.C, imageR)
 ExciteTest(image)
 
-def ActOutTest(images: list[Image]) -> None:
+def OutputsTest(images: list[Image]) -> None:
     for i in images:
         print(str(i))
-    actout = ActOut(images)
+    outputs = Outputs(images)
     x = 1
-    for act in actout:
+    for act in outputs:
         print('Out ' + str(x) + ' -> ' + str(act))
         x = x + 1
     print('-' * 60)
@@ -295,13 +295,13 @@ imageL = Image(IQI, Op.S, I)
 imageR = Image(IEI, Op.S, Image(ICI, Op.S, I))
 image = Image(imageL, Op.C, imageR)
 images = [imageL, imageR, image]
-ActOutTest(images)
+OutputsTest(images)
 
 imageL = Image(IQI, Op.E, I)
 imageR = Image(IEI, Op.E, Image(ICI, Op.S, I))
 image = Image(imageL, Op.E, imageR)
 images = [imageL, imageR, image]
-ActOutTest(images)
+OutputsTest(images)
 
 def ActInTest(images: list[Image]) -> None:
     for i in images:
