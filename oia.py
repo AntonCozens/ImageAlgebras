@@ -73,9 +73,9 @@ def Excite(i: Image) -> list[Image]:
         return Excite(i.L) + Excite(i.R)
     return [i]
 
-def SSplit(i: Image) -> list[Image]:
+def ExciteSeq(i: Image) -> list[Image]:
     if i.Op == Op.S:
-        return SSplit(i.L) + SSplit(i.R)
+        return ExciteSeq(i.L) + ExciteSeq(i.R)
     return [i]
 
 def ActOut(images : list[Image]) -> list[Image]:
@@ -224,39 +224,39 @@ ExciteTest(image)
 image = Image(IQI, Op.Q, IEI)
 ExciteTest(image)
 
-def SSplitTest(image: Image) -> None:
+def ExciteSeqTest(image: Image) -> None:
     print(str(image) + ' ->')
-    for i in SSplit(image):
+    for i in ExciteSeq(image):
         print(str(i))
     print('-' * 60)
 
-SSplitTest(I)
-SSplitTest(ICI)
-SSplitTest(ISI)
-SSplitTest(IEI)
-SSplitTest(IQI)
+ExciteSeqTest(I)
+ExciteSeqTest(ICI)
+ExciteSeqTest(ISI)
+ExciteSeqTest(IEI)
+ExciteSeqTest(IQI)
 image = Image(I, Op.C, ICI)
-SSplitTest(image)
+ExciteSeqTest(image)
 image = Image(ICI, Op.S, I)
-SSplitTest(image)
+ExciteSeqTest(image)
 image = Image(ICI, Op.S, ICI)
-SSplitTest(image)
+ExciteSeqTest(image)
 image = Image(ISI, Op.S, ICI)
-SSplitTest(image)
+ExciteSeqTest(image)
 image = Image(ICI, Op.S, ISI)
-SSplitTest(image)
+ExciteSeqTest(image)
 image = Image(ISI, Op.S, ISI)
-SSplitTest(image)
+ExciteSeqTest(image)
 image = Image(IEI, Op.S, IQI)
-SSplitTest(image)
+ExciteSeqTest(image)
 image = Image(IQI, Op.S, IEI)
-SSplitTest(image)
+ExciteSeqTest(image)
 image = Image(IQI, Op.S, IEI)
-SSplitTest(image)
+ExciteSeqTest(image)
 image = Image(IQI, Op.E, IEI)
-SSplitTest(image)
+ExciteSeqTest(image)
 image = Image(IQI, Op.Q, IEI)
-SSplitTest(image)
+ExciteSeqTest(image)
 
 def ExciteTest(image: Image) -> None:
     print(str(image) + ' ->')
