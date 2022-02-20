@@ -126,6 +126,19 @@ def Quieten(o: Image, li: Image, ri: list[Image]) -> Image:
         result = Image(o.R, Op.S, result)
     return result
 
+def Reduce(image: Image) -> Image:
+    excited = ExciteAll(image)
+    triggers = []
+    acceptors = []
+    for opt in excited:
+        triggers = triggers + Outputs(opt)
+        acceptors = acceptors + Inputs(opt)
+    if triggers == []:
+        return image
+    trigger = triggers[0]
+    for opt in excited:
+        return(trigger, acceptors[0], acceptors[1:])
+
 def RunSub(old: Image, sub: Image, var: Image):
     new = Sub(old, sub, var)
     print("old: " + str(old))
@@ -391,3 +404,4 @@ ExciteAllTest(image)
 ExciteAllTest(YL)
 ExciteAllTest(YR)
 
+print(str(Reduce(H)))
