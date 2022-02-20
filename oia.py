@@ -78,25 +78,25 @@ def ExciteSeq(i: Image) -> list[Image]:
         return ExciteSeq(i.L) + ExciteSeq(i.R)
     return [i]
 
-def ExciteAll(i: Image) -> list[list[Image]]:
+def ExciteAll(image: Image) -> list[list[Image]]:
     excited = []
-    for opt in Excite(i):
+    for opt in Excite(image):
         excited = excited + [ExciteSeq(opt)]
     return excited
 
 def Outputs(images : list[Image]) -> list[Image]:
-    sending = []
-    for i in images:
-        if i.Op == Op.E:
-            sending = sending + [i.L]
-    return sending
+    p = images[0]
+    result = []
+    if p.Op == Op.E:
+        result = result + [p]
+    return result
 
 def Inputs(images : list[Image]) -> list[Image]:
-    receiving = []
-    for i in images:
-        if i.Op == Op.Q:
-            receiving = receiving + [i.L]
-    return receiving
+    p = images[0]
+    result = []
+    if p.Op == Op.Q:
+        result = result + [p]
+    return result
 
 
 # Substitution.
@@ -127,17 +127,31 @@ def Quieten(o: Image, li: Image, ri: list[Image]) -> Image:
     return result
 
 def Reduce(image: Image) -> Image:
+    options = Excite(image)
     excited = ExciteAll(image)
+    for option in excited:
+        for seq in option:
+            print(str(seq))
+        print('----')
     triggers = []
     acceptors = []
     for opt in excited:
         triggers = triggers + Outputs(opt)
         acceptors = acceptors + Inputs(opt)
+    print("Triggers")
+    for t in triggers:
+        print(str(t))
+    print("Acceptors")
+    for a in acceptors:
+        print(str(a))
     if triggers == []:
         return image
     trigger = triggers[0]
-    for opt in excited:
-        return(trigger, acceptors[0], acceptors[1:])
+    newImages = []
+    for opt in options:
+        newImages = newImages + [Sub(opt, trigger.R, ICI)]
+    for newOpt in newImages:
+        print(str(newOpt))
 
 def RunSub(old: Image, sub: Image, var: Image):
     new = Sub(old, sub, var)
@@ -404,4 +418,8 @@ ExciteAllTest(image)
 ExciteAllTest(YL)
 ExciteAllTest(YR)
 
-print(str(Reduce(H)))
+print('Experiment IV: Vision 1,')
+print('#' * 60)
+# print(str(Reduce(Image(YL, Op.C, YR))))
+print(str(Reduce(YL)))
+print(str(Reduce(YR)))
