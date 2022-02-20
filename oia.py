@@ -65,6 +65,9 @@ class Image:
             return "I"
         return "(" + str(self.L) + self.Op + str(self.R) + ")"
 
+OI = Op.I
+I = Image(Image("", OI, ""), OI, Image("", OI, ""))
+
 def CSplit(i: Image) -> list[Image]:
     if i.Op == Op.C:
         return CSplit(i.L) + CSplit(i.R)
@@ -93,8 +96,6 @@ def ActIn(images : list[Image]) -> list[Image]:
             receiving = receiving + [i.L]
     return receiving
 
-def Quieten(ill: list[list[Image]], s: Image, v: Image) -> Image:
-    return I
 
 # Substitution.
 # i - Image
@@ -110,6 +111,15 @@ def Sub(i: Image, s: Image, v: Image) -> Image:
             return i
         return Image(i.L, i.Op, Image(I, Op.E, I))
     return Image(Sub(i.L, s, v), i.Op, Sub(i.L, s, v))
+
+def Quieten(o: Image, li: Image, ri: list[Image]) -> Image:
+    result = I
+    if o.Op == Op.E:
+        # match channels.
+        if o.L == li.L:
+            for i in ri:
+                result = Image(Sub(i, o.R, I), Op.S, result)
+    return result
 
 def RunSub(old: Image, sub: Image, var: Image):
     new = Sub(old, sub, var)
@@ -128,8 +138,6 @@ def RunSubTest(old: Image, sub: Image, var: Image, exp: Image):
     print(str(str(new) == str(exp)))
     print("=" * 60)
 
-OI = Op.I
-I = Image(Image("", OI, ""), OI, Image("", OI, ""))
 ICI = Image(I, Op.C, I)
 H = Image(Image(I ,Op.Q , ICI), Op.S, Image(Image(I, Op.E, ICI), Op.S, ICI))
 YL = Image(Image(Image(I, Op.E, H), Op.S, H), Op.C, H)
@@ -313,3 +321,36 @@ imageR = Image(IEI, Op.Q, Image(ICI, Op.S, I))
 image = Image(imageL, Op.Q, imageR)
 images = [imageL, imageR, image]
 ActInTest(images)
+
+def QuietenTest(o: Image, li: Image, ri: list[Image]):
+    print(str(o))
+    print(str(li))
+    RI = I
+    for i in ri:
+        RI = Image(i, Op.S, RI)
+    print(str(RI))
+    quiet = Quieten(o, li, ri)
+    print('-> ' + str(quiet))
+    print('*' * 60)
+
+o = Image(ICI, Op.E, ICI)
+li = Image(ICI, Op.Q, IQI)
+QuietenTest(o, li, [ISI])
+
+o = Image(ICI, Op.E, ISI)
+li = Image(ICI, Op.Q, IQI)
+QuietenTest(o, li, [IQI])
+
+o = Image(ICI, Op.E, ISI)
+li = Image(ISI, Op.Q, IQI)
+QuietenTest(o, li, [IQI])
+
+o = Image(ICI, Op.E, ISI)
+li = Image(ICI, Op.Q, IQI)
+ri = Image(IQI, Op.S, Image(IQI, Op.S, IQI))
+QuietenTest(o, li, [ri])
+
+o = Image(ICI, Op.E, ICI)
+li = Image(ICI, Op.Q, ISI)
+ri = Image(IQI, Op.S, Image(IQI, Op.S, IQI))
+QuietenTest(o, li, [ri])
