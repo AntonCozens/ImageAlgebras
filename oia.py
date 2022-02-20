@@ -78,6 +78,12 @@ def ExciteSeq(i: Image) -> list[Image]:
         return ExciteSeq(i.L) + ExciteSeq(i.R)
     return [i]
 
+def ExciteAll(i: Image) -> list[list[Image]]:
+    excited = []
+    for opt in Excite(i):
+        excited = excited + [ExciteSeq(opt)]
+    return excited
+
 def Outputs(images : list[Image]) -> list[Image]:
     sending = []
     for i in images:
@@ -364,3 +370,24 @@ o = Image(ICI, Op.E, ICI)
 li = Image(ICI, Op.C, ISI)
 ri = Image(IQI, Op.S, Image(IQI, Op.S, IQI))
 QuietenTest(o, li, [ri])
+
+print("Start: ExciteAllTests")
+
+def ExciteAllTest(image: Image) -> None:
+    print(str(image))
+    for opt in ExciteAll(image):
+        for seq in opt:
+            print('    ' + str(seq))
+        print('----')
+
+ExciteAllTest(ICI)
+
+image = Image(ICI, Op.C, Image(ICI, Op.C, I))
+ExciteAllTest(image)
+image = Image(IQI, Op.C, Image(ICI, Op.C, I))
+ExciteAllTest(image)
+image = Image(IQI, Op.C, Image(ISI, Op.C, IEI))
+ExciteAllTest(image)
+ExciteAllTest(YL)
+ExciteAllTest(YR)
+
