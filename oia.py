@@ -114,20 +114,19 @@ def Sub(i: Image, s: Image, v: Image) -> Image:
         return Image(i.L, i.Op, Image(I, Op.E, I))
     return Image(Sub(i.L, s, v), i.Op, Sub(i.L, s, v))
 
-def Quieten(o: Image, li: Image, ri: list[Image]) -> Image:
+def Quieten(head: Image, var: Image, tail: list[Image]) -> Image:
     result = I
-    if o.Op == Op.E and li.Op == Op.Q:
+    if head.Op == Op.E and var.Op == Op.Q:
         # match channels.
-        if o.L == li.L:
-            for p in ri:
-                result = Image(Sub(ri, o.R, li.R), Op.S, result)
+        if head.L == var.L:
+            for p in tail:
+                result = Image(Sub(tail, head.R, var.R), Op.S, result)
             return result
-    for i in ri:
-        result = Image(o.R, Op.S, result)
+    for i in tail:
+        result = Image(head.R, Op.S, result)
     return result
 
 def Reduce(image: Image) -> Image:
-    options = Excite(image)
     excited = ExciteAll(image)
     for option in excited:
         for seq in option:
@@ -143,9 +142,13 @@ def Reduce(image: Image) -> Image:
         return image
     trigger = triggers[0]
     newImages = []
-    for opt in options:
-        newImages = newImages + [Sub(opt, trigger.R, ICI)]
-    for newOpt in newImages:
+    print("Options / Choices")
+    choices = Excite(image)
+    for option in choices:
+        print(str(option))
+        newImages = newImages + [Quieten(opt, trigger.R, Inputs(option))]
+    print('New Options / Choies')
+    for newOption in newImages:
         print(str(newOpt))
 
 def RunSub(old: Image, sub: Image, var: Image):
@@ -416,5 +419,5 @@ ExciteAllTest(YR)
 print('Experiment IV: Vision 1,')
 print('#' * 60)
 # print(str(Reduce(Image(YL, Op.C, YR))))
-print(str(Reduce(YL)))
-print(str(Reduce(YR)))
+# print(str(Reduce(YL)))
+# print(str(Reduce(YR)))
