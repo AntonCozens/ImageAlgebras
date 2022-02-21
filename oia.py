@@ -36,8 +36,10 @@
 #
 # li o ri
 #
-from urllib.parse import non_hierarchical
-from list_and_set import *  
+from list_and_set import *
+
+class Format:  
+    Indent = 0
 
 class Op:
     I = "I"
@@ -69,26 +71,30 @@ OI = Op.I
 I = Image(Image("", OI, ""), OI, Image("", OI, ""))
 
 def Excite(i: Image) -> list[Image]:
-    print("    Excite" + ' ----|')
+    print('    ' + ('-' * Format.Indent) + 'Excite ----|')
     if i.Op == Op.C:
         return Excite(i.L) + Excite(i.R)
     return [i]
 
 def ExciteSeq(i: Image) -> list[Image]:
-    print("    ExciteSeq" + ' ----|')
+    Format.Indent = Format.Indent + 1
+    print('    ' + ('- ' * Format.Indent) + 'ExciteSeq ----|')
     if i.Op == Op.S:
-        return ExciteSeq(i.L) + ExciteSeq(i.R)
-    return [i]
+        result = ExciteSeq(i.L) + ExciteSeq(i.R)
+    else:
+        result = [i]
+    Format.Indent = Format.Indent - 1
+    return result
 
 def ExciteAll(image: Image) -> list[list[Image]]:
-    print("    ExciteAll" + ' ----|')
+    print('    ' + ('-' * Format.Indent) + 'ExciteAll ----|')
     excited = []
     for opt in Excite(image):
         excited = excited + [ExciteSeq(opt)]
     return excited
 
 def Outputs(images : list[Image]) -> list[Image]:
-    print("    Outputs" + ' ----|')
+    print('    ' + ('-' * Format.Indent) + 'Outputs  ----|')
     p = images[0]
     result = []
     if p.Op == Op.E:
@@ -96,7 +102,7 @@ def Outputs(images : list[Image]) -> list[Image]:
     return result
 
 def Inputs(images : list[Image]) -> list[Image]:
-    print("    Inputs" + ' ----|')
+    print('    ' + ('-' * Format.Indent) + 'Inputs  ----|')
     p = images[0]
     result = []
     if p.Op == Op.Q:
@@ -109,7 +115,7 @@ def Inputs(images : list[Image]) -> list[Image]:
 # s - Substitution Image
 # v - Variable Image
 def Sub(i: Image, s: Image, v: Image) -> Image:
-    print("    Sub" + ' ----|')
+    print('    ' + ('-' * Format.Indent) + 'Sub  ----|')
     if i != v:
         return i
     if str(v) == str(i):
@@ -121,7 +127,7 @@ def Sub(i: Image, s: Image, v: Image) -> Image:
     return Image(Sub(i.L, s, v), i.Op, Sub(i.L, s, v))
 
 def Quieten(head: Image, var: Image, tail: list[Image]) -> Image:
-    print("    Quieten" + ' ----|')
+    print('    ' + ('-' * Format.Indent) + 'Quieten  ----|')
     result = I
     if head.Op == Op.E and var.Op == Op.Q:
         # match channels.
@@ -134,7 +140,7 @@ def Quieten(head: Image, var: Image, tail: list[Image]) -> Image:
     return head
 
 def Reduce(image: Image) -> Image:
-    print("    Reduce" + ' ----|')
+    print('    ' + ('-' * Format.Indent) + 'Reduce  ----|')
     excited = ExciteAll(image)
     for option in excited:
         for seq in option:
@@ -343,7 +349,7 @@ images = [imageL, imageR, image]
 OutputsTest(images)
 
 def InputsTest(images: list[Image]) -> None:
-    print("InputsTest" + ' ----|')
+    print('InputsTest ----|')
     for i in images:
         print(str(i))
     inputs = Inputs(images)
@@ -408,7 +414,7 @@ QuietenTest(o, li, [ri])
 print("Start: ExciteAllTests")
 
 def ExciteAllTest(image: Image) -> None:
-    print("InputsTest" + ' ----|')
+    print('ExciteAllTest +  ----|')
     print(str(image))
     for opt in ExciteAll(image):
         for seq in opt:
