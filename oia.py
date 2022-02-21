@@ -69,22 +69,26 @@ OI = Op.I
 I = Image(Image("", OI, ""), OI, Image("", OI, ""))
 
 def Excite(i: Image) -> list[Image]:
+    print("    Excite" + ' ----|')
     if i.Op == Op.C:
         return Excite(i.L) + Excite(i.R)
     return [i]
 
 def ExciteSeq(i: Image) -> list[Image]:
+    print("    ExciteSeq" + ' ----|')
     if i.Op == Op.S:
         return ExciteSeq(i.L) + ExciteSeq(i.R)
     return [i]
 
 def ExciteAll(image: Image) -> list[list[Image]]:
+    print("    ExciteAll" + ' ----|')
     excited = []
     for opt in Excite(image):
         excited = excited + [ExciteSeq(opt)]
     return excited
 
 def Outputs(images : list[Image]) -> list[Image]:
+    print("    Outputs" + ' ----|')
     p = images[0]
     result = []
     if p.Op == Op.E:
@@ -92,6 +96,7 @@ def Outputs(images : list[Image]) -> list[Image]:
     return result
 
 def Inputs(images : list[Image]) -> list[Image]:
+    print("    Inputs" + ' ----|')
     p = images[0]
     result = []
     if p.Op == Op.Q:
@@ -104,6 +109,7 @@ def Inputs(images : list[Image]) -> list[Image]:
 # s - Substitution Image
 # v - Variable Image
 def Sub(i: Image, s: Image, v: Image) -> Image:
+    print("    Sub" + ' ----|')
     if i != v:
         return i
     if str(v) == str(i):
@@ -115,18 +121,20 @@ def Sub(i: Image, s: Image, v: Image) -> Image:
     return Image(Sub(i.L, s, v), i.Op, Sub(i.L, s, v))
 
 def Quieten(head: Image, var: Image, tail: list[Image]) -> Image:
+    print("    Quieten" + ' ----|')
     result = I
     if head.Op == Op.E and var.Op == Op.Q:
         # match channels.
         if head.L == var.L:
             for p in tail:
-                result = Image(Sub(tail, head.R, var.R), Op.S, result)
+                result = Image(result, Op.S, Image(Sub(tail, head.R, var.R), Op.S, result))
             return result
     for i in tail:
-        result = Image(head.R, Op.S, result)
-    return result
+        result = Image(head, Op.S, result)
+    return head
 
 def Reduce(image: Image) -> Image:
+    print("    Reduce" + ' ----|')
     excited = ExciteAll(image)
     for option in excited:
         for seq in option:
@@ -146,10 +154,10 @@ def Reduce(image: Image) -> Image:
     choices = Excite(image)
     for option in choices:
         print(str(option))
-        newImages = newImages + [Quieten(opt, trigger.R, Inputs(option))]
+        newImages = newImages + [Quieten(option, trigger.R, Inputs(ExciteSeq(option)))]
     print('New Options / Choies')
     for newOption in newImages:
-        print(str(newOpt))
+        print(str(newOption))
 
 def RunSub(old: Image, sub: Image, var: Image):
     new = Sub(old, sub, var)
@@ -335,6 +343,7 @@ images = [imageL, imageR, image]
 OutputsTest(images)
 
 def InputsTest(images: list[Image]) -> None:
+    print("InputsTest" + ' ----|')
     for i in images:
         print(str(i))
     inputs = Inputs(images)
@@ -399,6 +408,7 @@ QuietenTest(o, li, [ri])
 print("Start: ExciteAllTests")
 
 def ExciteAllTest(image: Image) -> None:
+    print("InputsTest" + ' ----|')
     print(str(image))
     for opt in ExciteAll(image):
         for seq in opt:
@@ -419,5 +429,5 @@ ExciteAllTest(YR)
 print('Experiment IV: Vision 1,')
 print('#' * 60)
 # print(str(Reduce(Image(YL, Op.C, YR))))
-# print(str(Reduce(YL)))
-# print(str(Reduce(YR)))
+print(str(Reduce(YL)))
+print(str(Reduce(YR)))
