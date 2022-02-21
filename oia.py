@@ -80,7 +80,7 @@ def ExciteSeq(i: Image) -> list[Image]:
     Format.Indent = Format.Indent + 1
     print('    ' + ('- ' * Format.Indent) + 'ExciteSeq ----|')
     if i.Op == Op.S:
-        result = ExciteSeq(i.L) + ExciteSeq(i.R)
+        result = [i] + ExciteSeq(i.R)
     else:
         result = [i]
     Format.Indent = Format.Indent - 1
@@ -432,8 +432,11 @@ ExciteAllTest(image)
 ExciteAllTest(YL)
 ExciteAllTest(YR)
 
-print('Experiment IV: Vision 1,')
-print('#' * 60)
 # print(str(Reduce(Image(YL, Op.C, YR))))
+
+print('Experiment IV: Vision 1, YL to YR')
+print('#' * 60)
 print(str(Reduce(YL)))
+print('Experiment IV: Vision 1, YR to YL')
+print('#' * 60)
 print(str(Reduce(YR)))
