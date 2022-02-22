@@ -80,7 +80,7 @@ def ExciteSeq(i: Image) -> list[Image]:
     Format.Indent = Format.Indent + 1
     print('    ' + ('- ' * Format.Indent) + 'ExciteSeq ----|')
     if i.Op == Op.S:
-        result = [i] + ExciteSeq(i.R)
+        result = [i.L] + ExciteSeq(i.R)
     else:
         result = [i]
     Format.Indent = Format.Indent - 1
@@ -93,11 +93,13 @@ def ExciteAll(image: Image) -> list[list[Image]]:
         excited = excited + [ExciteSeq(opt)]
     return excited
 
-def Outputs(images : list[Image]) -> list[Image]:
-    print('    ' + ('-' * Format.Indent) + 'Outputs  ----|')
-    p = images[0]
+def Outputs(sequents : list[Image]) -> list[Image]:
+    print('    ' + ('-' * Format.Indent) + ' Triggers ----|')
+    p = sequents[0]
     result = []
+    print(str(p))
     if p.Op == Op.E:
+        print(str(p))
         result = result + [p]
     return result
 
@@ -143,12 +145,15 @@ def Reduce(image: Image) -> Image:
     print('    ' + ('-' * Format.Indent) + 'Reduce  ----|')
     excited = ExciteAll(image)
     for option in excited:
+        print('---- Choice Sequence')
         for seq in option:
             print(str(seq))
         print('----')
     triggers = []
-    for opt in excited:
-        triggers = triggers + Outputs(opt)
+    for option in excited:
+        for seq in option:
+            print(str(seq))
+        triggers = triggers + Outputs(option)
     print("Triggers")
     for t in triggers:
         print(str(t))
@@ -417,9 +422,9 @@ def ExciteAllTest(image: Image) -> None:
     print('ExciteAllTest +  ----|')
     print(str(image))
     for opt in ExciteAll(image):
+        print('----')
         for seq in opt:
             print('    ' + str(seq))
-        print('----')
 
 ExciteAllTest(ICI)
 
@@ -436,7 +441,11 @@ ExciteAllTest(YR)
 
 print('Experiment IV: Vision 1, YL to YR')
 print('#' * 60)
-print(str(Reduce(YL)))
+print(str(YL))
+print('Actual:   ' + str(Reduce(YL)))
+print('Expected: ' + str(YR))
 print('Experiment IV: Vision 1, YR to YL')
 print('#' * 60)
-print(str(Reduce(YR)))
+print(str(YR))
+print('Actual:   ' + str(Reduce(YR)))
+print('Expected: ' + str(YL))
