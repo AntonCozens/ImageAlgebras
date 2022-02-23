@@ -81,8 +81,8 @@ def Excite(i: Image) -> list[Image]:
     return result
 
 def ExciteSeq(i: Image) -> list[Image]:
+    print(('-' * Format.Indent) + 'ExciteSeq  ----|')
     Format.Indent = Format.Indent + 1
-    # print('    ' + ('- ' * Format.Indent) + 'ExciteSeq ----|')
     if i.Op == Op.S:
         result = [i.L] + ExciteSeq(i.R)
     else:
