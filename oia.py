@@ -72,14 +72,17 @@ OI = Op.I
 I = Image(Image("", OI, ""), OI, Image("", OI, ""))
 
 def Excite(i: Image) -> list[Image]:
-    print('    ' + ('-' * Format.Indent) + 'Excite ----|')
+    print(('-' * Format.Indent) + 'Excite  ----|')
+    Format.Indent = Format.Indent + 1
+    result = [i]
     if i.Op == Op.C:
-        return Excite(i.L) + Excite(i.R)
-    return [i]
+        result = Excite(i.L) + Excite(i.R)
+    Format.Indent = Format.Indent - 1
+    return result
 
 def ExciteSeq(i: Image) -> list[Image]:
     Format.Indent = Format.Indent + 1
-    print('    ' + ('- ' * Format.Indent) + 'ExciteSeq ----|')
+    # print('    ' + ('- ' * Format.Indent) + 'ExciteSeq ----|')
     if i.Op == Op.S:
         result = [i.L] + ExciteSeq(i.R)
     else:
@@ -88,7 +91,8 @@ def ExciteSeq(i: Image) -> list[Image]:
     return result
 
 def ExciteAll(image: Image) -> list[list[Image]]:
-    print('    ' + ('-' * Format.Indent) + 'ExciteAll ----|')
+    print(('-' * Format.Indent) + 'ExciteAll  ----|')
+    Format.Indent = Format.Indent + 1
     excited = []
     for opt in Excite(image):
         excited = excited + [ExciteSeq(opt)]
@@ -143,8 +147,10 @@ def Quieten(head: Image, var: Image, tail: list[Image]) -> Image:
 
 def Reduce(image: Image) -> Image:
     print(('-' * Format.Indent) + 'Reduce  ----|')
-    return image
+    Format.Indent = Format.Indent + 1
+    result = image
     excited = ExciteAll(image)
+    return result
     for option in excited:
         print('---- Choice Sequence')
         for seq in option:
@@ -442,6 +448,7 @@ ExciteAllTest(YR)
 
 print('Experiment IV: Vision 1, YL to YR')
 print('Begin:  ' + '#' * Format.Pad)
+Format.Indent = 0
 print('input:  ' + str(YL))
 print('Output: ' + str(Reduce(YL)))
 print('ExOput: ' + str(YR))
