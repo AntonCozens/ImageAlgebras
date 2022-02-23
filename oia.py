@@ -90,15 +90,6 @@ def ExciteSeq(i: Image) -> list[Image]:
     Format.Indent = Format.Indent - 1
     return result
 
-def ExciteAll(image: Image) -> list[list[Image]]:
-    print(('-' * Format.Indent) + 'ExciteAll  ----|')
-    Format.Indent = Format.Indent + 1
-    excited = []
-    for opt in Excite(image):
-        excited = excited + [ExciteSeq(opt)]
-    Format.Indent = Format.Indent - 1
-    return excited
-
 def Transmitters(sequents : list[Image]) -> list[Image]:
     print(('-' * Format.Indent) + 'Transmitters  ----|')
     Format.Indent = Format.Indent + 1
@@ -110,12 +101,14 @@ def Transmitters(sequents : list[Image]) -> list[Image]:
     Format.Indent = Format.Indent - 1
     return result
 
-def Inputs(images : list[Image]) -> list[Image]:
-    print('    ' + ('-' * Format.Indent) + 'Inputs  ----|')
-    p = images[0]
+def Inputs(sequents : list[Image]) -> list[Image]:
+    print(('-' * Format.Indent) + 'Transmitters  ----|')
+    Format.Indent = Format.Indent + 1
     result = []
-    if p.Op == Op.Q:
-        result = result + [p]
+    hd = sequents[0]
+    if hd.Op == Op.Q:
+        result = result + [hd]
+    Format.Indent = Format.Indent - 1
     return result
 
 
@@ -152,7 +145,9 @@ def Reduce(image: Image) -> Image:
     print(('-' * Format.Indent) + 'Reduce  ----|')
     Format.Indent = Format.Indent + 1
     result = image
-    excited = ExciteAll(image)
+    excited = []
+    for opt in Excite(image):
+        excited = excited + [ExciteSeq(opt)]
     # for option in excited:
     #     print('---- Choice Sequence')
     #     for seq in option:
@@ -431,27 +426,6 @@ li = Image(ICI, Op.C, ISI)
 ri = Image(IQI, Op.S, Image(IQI, Op.S, IQI))
 QuietenTest(o, li, [ri])
 
-print("Start: ExciteAllTests")
-
-def ExciteAllTest(image: Image) -> None:
-    print('ExciteAllTest +  ----|')
-    print(str(image))
-    for opt in ExciteAll(image):
-        print('----')
-        for seq in opt:
-            print('    ' + str(seq))
-
-ExciteAllTest(ICI)
-
-image = Image(ICI, Op.C, Image(ICI, Op.C, I))
-ExciteAllTest(image)
-image = Image(IQI, Op.C, Image(ICI, Op.C, I))
-ExciteAllTest(image)
-image = Image(IQI, Op.C, Image(ISI, Op.C, IEI))
-ExciteAllTest(image)
-ExciteAllTest(YL)
-ExciteAllTest(YR)
-
 # print(str(Reduce(Image(YL, Op.C, YR))))
 
 print('Experiment IV: Vision 1, YL to YR')
@@ -462,8 +436,8 @@ print('Output: ' + str(Reduce(YL)))
 print('ExOput: ' + str(YR))
 print('End:    ' + '#' * Format.Pad + '\r\n')
 
-print('Experiment IV: Vision 1, YR to YL')
-print('#' * 60)
-print(str(YR))
-print('Actual:   ' + str(Reduce(YR)))
-print('Expected: ' + str(YL))
+# print('Experiment IV: Vision 1, YR to YL')
+# print('#' * 60)
+# print(str(YR))
+# print('Actual:   ' + str(Reduce(YR)))
+# print('Expected: ' + str(YL))
