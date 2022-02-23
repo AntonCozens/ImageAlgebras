@@ -166,6 +166,14 @@ def Reduce(image: Image) -> Image:
     trigger = transmitters[0]
     print(('-' * Format.Indent) + 'L: ' + str(trigger.L))
     print(('-' * Format.Indent) + 'R: ' + str(trigger.R))
+
+    options = Excite(image)
+    print(len(options))
+
+    newOptions = []
+    for option in options:
+        newOptions = newOptions + [Quieten(option, trigger.R, Inputs(ExciteSeq(option)))] 
+
     return result
     newImages = []
     print("Options / Choices")
