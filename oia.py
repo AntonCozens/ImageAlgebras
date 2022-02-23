@@ -161,13 +161,12 @@ def Reduce(image: Image) -> Image:
     transmitters = []
     for option in excited:
         transmitters = transmitters + Transmitters(option)
-    return result
-    print("transmitters")
-    for t in transmitters:
-        print(str(t))
-    if transmitters == []:
-        return image
+    if len(transmitters) == 0:
+        return image    
     trigger = transmitters[0]
+    print(('-' * Format.Indent) + 'L: ' + str(trigger.L))
+    print(('-' * Format.Indent) + 'R: ' + str(trigger.R))
+    return result
     newImages = []
     print("Options / Choices")
     choices = Excite(image)
