@@ -27,5 +27,24 @@ result = Excite(eval(imageString))
 print(str(result[0]))
 sequents = ExciteSeq(result[0])
 print(sequents[0])
-transmitters = Outputs(sequents)
+transmitters = Transmitters(sequents)
 print(transmitters[0])
+
+#
+# Check the dissabmbly of H.
+#
+print('Check splitting of H')
+print(H)
+print(Excite(H))
+print(ExciteSeq(Excite(H)[0]))
+print(Transmitters(ExciteSeq(Excite(H)[0])))
+
+#
+# Check the dissabmbly of I!H.H.
+#
+print('Check splitting of HP')
+HP = Image(Image(I, Op.E, H), Op.S, H)
+print(HP)
+print(Excite(HP))
+print(ExciteSeq(Excite(HP)[0]))
+print(Transmitters(ExciteSeq(Excite(HP)[0]))[0])

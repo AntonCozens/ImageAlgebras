@@ -40,6 +40,7 @@ from list_and_set import *
 
 class Format:  
     Indent = 0
+    Pad = 112
 
 class Op:
     I = "I"
@@ -93,13 +94,12 @@ def ExciteAll(image: Image) -> list[list[Image]]:
         excited = excited + [ExciteSeq(opt)]
     return excited
 
-def Outputs(sequents : list[Image]) -> list[Image]:
-    print('    ' + ('-' * Format.Indent) + ' Triggers ----|')
+def Transmitters(sequents : list[Image]) -> list[Image]:
+    print('    ' + ('-' * Format.Indent) + ' Transmitters ----|')
     p = sequents[0]
     result = []
-    print(str(p))
     if p.Op == Op.E:
-        print(str(p))
+        print('    ' + ('T-' * Format.Indent) + str(p))
         result = result + [p]
     return result
 
@@ -142,24 +142,25 @@ def Quieten(head: Image, var: Image, tail: list[Image]) -> Image:
     return head
 
 def Reduce(image: Image) -> Image:
-    print('    ' + ('-' * Format.Indent) + 'Reduce  ----|')
+    print(('-' * Format.Indent) + 'Reduce  ----|')
+    return image
     excited = ExciteAll(image)
     for option in excited:
         print('---- Choice Sequence')
         for seq in option:
             print(str(seq))
         print('----')
-    triggers = []
+    transmitters = []
     for option in excited:
         for seq in option:
-            print(str(seq))
-        triggers = triggers + Outputs(option)
-    print("Triggers")
-    for t in triggers:
+            print('    ' + ('-' * Format.Indent) + 'Reduce ' + str(seq))
+        transmitters = transmitters + Transmitters(option)
+    print("transmitters")
+    for t in transmitters:
         print(str(t))
-    if triggers == []:
+    if transmitters == []:
         return image
-    trigger = triggers[0]
+    trigger = transmitters[0]
     newImages = []
     print("Options / Choices")
     choices = Excite(image)
@@ -331,12 +332,12 @@ imageR = Image(IEI, Op.S, Image(ICI, Op.S, I))
 image = Image(imageL, Op.C, imageR)
 ExciteTest(image)
 
-def OutputsTest(images: list[Image]) -> None:
+def TransmittersTest(images: list[Image]) -> None:
     for i in images:
         print(str(i))
-    outputs = Outputs(images)
+    transmitters = Transmitters(images)
     x = 1
-    for act in outputs:
+    for act in transmitters:
         print('Out ' + str(x) + ' -> ' + str(act))
         x = x + 1
     print('-' * 60)
@@ -345,13 +346,13 @@ imageL = Image(IQI, Op.S, I)
 imageR = Image(IEI, Op.S, Image(ICI, Op.S, I))
 image = Image(imageL, Op.C, imageR)
 images = [imageL, imageR, image]
-OutputsTest(images)
+TransmittersTest(images)
 
 imageL = Image(IQI, Op.E, I)
 imageR = Image(IEI, Op.E, Image(ICI, Op.S, I))
 image = Image(imageL, Op.E, imageR)
 images = [imageL, imageR, image]
-OutputsTest(images)
+TransmittersTest(images)
 
 def InputsTest(images: list[Image]) -> None:
     print('InputsTest ----|')
@@ -440,10 +441,12 @@ ExciteAllTest(YR)
 # print(str(Reduce(Image(YL, Op.C, YR))))
 
 print('Experiment IV: Vision 1, YL to YR')
-print('#' * 60)
-print(str(YL))
-print('Actual:   ' + str(Reduce(YL)))
-print('Expected: ' + str(YR))
+print('Begin:  ' + '#' * Format.Pad)
+print('input:  ' + str(YL))
+print('Output: ' + str(Reduce(YL)))
+print('ExOput: ' + str(YR))
+print('End:    ' + '#' * Format.Pad + '\r\n')
+
 print('Experiment IV: Vision 1, YR to YL')
 print('#' * 60)
 print(str(YR))
