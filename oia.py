@@ -96,15 +96,18 @@ def ExciteAll(image: Image) -> list[list[Image]]:
     excited = []
     for opt in Excite(image):
         excited = excited + [ExciteSeq(opt)]
+    Format.Indent = Format.Indent - 1
     return excited
 
 def Transmitters(sequents : list[Image]) -> list[Image]:
-    print('    ' + ('-' * Format.Indent) + ' Transmitters ----|')
+    print(('-' * Format.Indent) + 'Transmitters  ----|')
+    Format.Indent = Format.Indent + 1
     p = sequents[0]
     result = []
     if p.Op == Op.E:
-        print('    ' + ('T-' * Format.Indent) + str(p))
+        print(('-' * Format.Indent) + ' T: ' + str(p))
         result = result + [p]
+    Format.Indent = Format.Indent - 1
     return result
 
 def Inputs(images : list[Image]) -> list[Image]:
@@ -150,17 +153,15 @@ def Reduce(image: Image) -> Image:
     Format.Indent = Format.Indent + 1
     result = image
     excited = ExciteAll(image)
-    return result
-    for option in excited:
-        print('---- Choice Sequence')
-        for seq in option:
-            print(str(seq))
-        print('----')
+    # for option in excited:
+    #     print('---- Choice Sequence')
+    #     for seq in option:
+    #         print(str(seq))
+    #     print('----')
     transmitters = []
     for option in excited:
-        for seq in option:
-            print('    ' + ('-' * Format.Indent) + 'Reduce ' + str(seq))
         transmitters = transmitters + Transmitters(option)
+    return result
     print("transmitters")
     for t in transmitters:
         print(str(t))
