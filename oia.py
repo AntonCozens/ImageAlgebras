@@ -162,13 +162,37 @@ def Reduce(image: Image) -> Image:
     for option in options:
         receptors = receptors + Inputs(ExciteSeq(option))
     for receptor in receptors:
-        print(('-' * Format.Indent) + 'Recep ' + str(receptor))
+        print(('-' * Format.Indent) + 'Recv: ' + str(receptor))
 
-    options = Excite(image)
+
     newOptions = []
+    for option in options:
+        newOptions = newOptions + [option]
+        newOption = I
+        sequents = ExciteSeq(option)
+        print('SEQ[0] ' + str(sequents[0]))
+        newSequents = []
+        if sequents[0] == trigger:
+            for sequent in sequents[1:]:
+                newSequents = newSequents + [sequent]
+                print(str(len(newSequents)) + ': ' + str(sequent))
+        else:
+            print('DO THAT')
+            newSeq = I
+            for sequent in sequents:
+                newSeq = Image(I, Op.S, sequent)
+                newOption = Image(Sub(newSeq, trigger.R, trigger.L), Op.C, newOption)  
+            print(': ' + str(newOption))
+                
+
+
+
+    result = I
     for option in newOptions:
-        newOptions = newOptions + []
-    
+        result = Image(result, Op.C, option)
+
+    return result
+
     result = I
     for option in newOptions:
         result = Image(result, Op.C, option)
