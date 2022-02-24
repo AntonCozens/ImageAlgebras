@@ -102,7 +102,7 @@ def Transmitters(sequents : list[Image]) -> list[Image]:
     return result
 
 def Inputs(sequents : list[Image]) -> list[Image]:
-    print(('-' * Format.Indent) + 'Transmitters  ----|')
+    print(('-' * Format.Indent) + 'Receptors  ----|')
     Format.Indent = Format.Indent + 1
     result = []
     hd = sequents[0]
@@ -145,14 +145,10 @@ def Reduce(image: Image) -> Image:
     print(('-' * Format.Indent) + 'Reduce  ----|')
     Format.Indent = Format.Indent + 1
     result = image
+    options = Excite(image)
     excited = []
-    for opt in Excite(image):
+    for opt in options:
         excited = excited + [ExciteSeq(opt)]
-    # for option in excited:
-    #     print('---- Choice Sequence')
-    #     for seq in option:
-    #         print(str(seq))
-    #     print('----')
     transmitters = []
     for option in excited:
         transmitters = transmitters + Transmitters(option)
@@ -162,23 +158,30 @@ def Reduce(image: Image) -> Image:
     print(('-' * Format.Indent) + 'L: ' + str(trigger.L))
     print(('-' * Format.Indent) + 'R: ' + str(trigger.R))
 
-    options = Excite(image)
-    print(len(options))
-
-    newOptions = []
+    receptors = []
     for option in options:
-        newOptions = newOptions + [Quieten(option, trigger.R, Inputs(ExciteSeq(option)))] 
+        receptors = receptors + Inputs(ExciteSeq(option))
+    for receptor in receptors:
+        print(('-' * Format.Indent) + 'Recep ' + str(receptor))
+
+    options = Excite(image)
+    newOptions = []
+    for option in newOptions:
+        newOptions = newOptions + []
+    
+    result = I
+    for option in newOptions:
+        result = Image(result, Op.C, option)
+
+    print('result: ' + str(result))
+        
+        # newOptions = newOptions + Sub(seq, trigger.R, trigger.L)
+
+
+    for option in newOptions:
+        result = Image(result, Op.C, option)
 
     return result
-    newImages = []
-    print("Options / Choices")
-    choices = Excite(image)
-    for option in choices:
-        print(str(option))
-        newImages = newImages + [Quieten(option, trigger.R, Inputs(ExciteSeq(option)))]
-    print('New Options / Choies')
-    for newOption in newImages:
-        print(str(newOption))
 
 def RunSub(old: Image, sub: Image, var: Image):
     new = Sub(old, sub, var)
