@@ -168,28 +168,32 @@ def Reduce(image: Image) -> Image:
     newOptions = []
     for option in options:
         newOptions = newOptions + [option]
-        newOption = I
+        newOption = None
         sequents = ExciteSeq(option)
         print('SEQ[0] ' + str(sequents[0]))
         newSequents = []
         if sequents[0] == trigger:
-            for sequent in sequents[1:]:
-                newSequents = newSequents + [sequent]
-                print(str(len(newSequents)) + ': ' + str(sequent))
+            print('DO THIS')
+            for sequent in reversed(sequents[1:]):
+                if newOption == None:
+                    newOption = sequent
+                else:
+                    newOption = Image(sequent, Op.S, newOption)  
+            print(': ' + str(newOption))
         else:
             print('DO THAT')
-            newSeq = I
-            for sequent in sequents:
-                newSeq = Image(I, Op.S, sequent)
-                newOption = Image(Sub(newSeq, trigger.R, trigger.L), Op.C, newOption)  
+            # newSeq = I
+            # for sequent in sequents:
+            #     newSeq = Image(I, Op.S, sequent)
+            #     newOption = Image(Sub(newSeq, trigger.R, trigger.L), Op.C, newOption)
+            if newOption == None:
+                newOption = sequent
+            else:
+                newOption =  Sub(option, trigger.R, trigger.L)
             print(': ' + str(newOption))
-                
-
-
-
+        newOptions = newOptions + [newOption]
+        
     result = I
-    for option in newOptions:
-        result = Image(result, Op.C, option)
 
     return result
 
