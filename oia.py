@@ -182,20 +182,24 @@ def Reduce(image: Image) -> Image:
             print(': ' + str(newOption))
         else:
             print('DO THAT')
-            # newSeq = I
-            # for sequent in sequents:
-            #     newSeq = Image(I, Op.S, sequent)
-            #     newOption = Image(Sub(newSeq, trigger.R, trigger.L), Op.C, newOption)
-            if newOption == None:
-                newOption = sequent
-            else:
-                newOption =  Sub(option, trigger.R, trigger.L)
+            # Loop through all sequents.
+            for sequent in reversed(sequents):
+                if newOption == None:
+                    newOption = sequent
+                else:
+                    newOption = Image(sequent, Op.S, newOption)
+            # If head match trigger substitute.
+            #     Creaate new option sub.
+            # else return whole thing.
+            print('PARAMS')
+            print(newOption)
+            print(trigger.R)
+            print(trigger.R)
+            newOption =  Sub(newOption, trigger.R, trigger.L)
             print(': ' + str(newOption))
         newOptions = newOptions + [newOption]
-        
-    result = I
 
-    return result
+    return
 
     result = I
     for option in newOptions:
